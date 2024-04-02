@@ -32,6 +32,7 @@ namespace VectorSearchAiAssistant.Service.Services
             _logger = logger;
 
             _searchIndexName = $"{_settings.IndexName}-content";
+            //_searchIndexName = $"{_settings.IndexName}";
 
             _searchClientOptions = new SearchClientOptions
             {

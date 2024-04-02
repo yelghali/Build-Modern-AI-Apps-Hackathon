@@ -23,7 +23,6 @@ This hackathon will challenge you and your team to launch a POC of a chat interf
 - .NET 7 SDK
 - Docker Desktop
 - Azure CLI 2.49.0
-- Helm v3.11.1 or greater - https://helm.sh/ (for AKS)
 - Subscription with access to the Azure OpenAI Service. Start here to [Request Access to Azure OpenAI Service](https://customervoice.microsoft.com/Pages/ResponsePage.aspx?id=v4j5cvGGr0GRqy180BHbR7en2Ais5pxKtso_Pz4b1_xUOFA5Qk1UWDRBMjg0WFhPMkIzTzhKQ1dWNyQlQCN0PWcu)
 
 ## Setting up your development environment
@@ -47,7 +46,7 @@ git checkout main
 3. Run the following PowerShell script to provision the infrastructure and deploy the API and frontend. Provide the name of a NEW resource group that will be created. This will provision all of the required infrastructure, deploy the API and web app services into Azure Kubernetes Service (AKS) if using the deployAks flag below or Azure Container Apps (ACA), and import data into Cosmos DB. 
 
 ```pwsh
-./scripts/Starter-Deploy.ps1  -resourceGroup <resource-group-name> -location <location> -subscription <subscription-id> -deployAks 1
+./scripts/Starter-Deploy.ps1  -resourceGroup <resource-group-name> -location <location> -subscription <subscription-id> -deployAks 0
 ```
 
 >**NOTE**:
@@ -87,17 +86,12 @@ For the purpose of this hackathon, you can whatever your preference is, either A
 1. After the command completes, navigate to resource group and obtain the name of the AKS service.
 2. Execute the following command to obtain the website's endpoint:
 
-    For ACA:
+    As the application is deployed on ACA:
 
     ```pwsh
     az deployment group show -g <resource-group-name> -n cosmosdb-openai-azuredeploy -o json --query properties.outputs.webFqdn.value
     ```
 
-    For AKS:
-
-    ```pwsh
-    az aks show -n <aks-name> -g <resource-group-name> -o tsv --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName
-    ```
 
 1. Browse to the website with the returned hostname.
 
@@ -111,13 +105,20 @@ After the deployment is complete the following Azure services will be deployed.
 - Azure OpenAI Service
 - Azure Cosmos DB
 - Azure Cognitive Search
-- Azure Container Apps (or AKS) 
+- Azure Container Apps 
 - Azure Storage
 - Azure Networking (*not pictured*)
 
 <p align="center">
     <img src="img/architecture.png" width="100%">
 </p>
+
+
+## Check that the resources are deployed (and if needed create the Azure OpenAPI model deployments) 
+
+ - You need a model deployment called "completions" based on the model "GPT3.5" or "GPT4" 
+ - A model deployment called "embeddings" based on the model "text-embedding-ada-002"
+
 
 
 ## Run the solution locally using Visual Studio
